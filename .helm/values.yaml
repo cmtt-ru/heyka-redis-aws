@@ -1,0 +1,42 @@
+redis:
+  image:
+    _default: "redis:6.0.5-buster"
+  host:
+    _default: redis
+  replicas:
+    _default: 3
+    heyka-stage: 3
+  resources:
+    requests:
+      cpu:
+        _default: 100m
+      memory:
+        _default: 600Mi
+    limits:
+      memory:
+        _default: 600Mi
+  storage:
+    class:
+      _default: rbd
+    size:
+      _default: 5Gi
+    custom_config:
+      _default:
+        - "maxmemory-policy allkeys-lru"
+        - "maxmemory 300mb"
+  sentinel:
+    replicas:
+      _default: 3
+  proxy:
+    resources:
+      requests:
+        cpu:
+          _default: 200m
+        memory:
+          _default: 128Mi
+      limits:
+        memory:
+          _default: 128Mi
+  exporter:
+    image:
+      _default: "oliver006/redis_exporter:v1.9.0-alpine"

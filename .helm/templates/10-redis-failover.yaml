@@ -1,0 +1,53 @@
+---
+apiVersion: databases.spotahome.com/v1
+kind: RedisFailover
+metadata:
+  name: redis
+spec:
+  priorityClassName: production-high
+  hardAntiAffinity: true
+  sentinel:
+    imagePullSecrets:
+    - name: registrysecret
+    replicas: {{ pluck .Values.werf.env .Values.redis.replicas | first | default .Values.redis.replicas._default }}
+    image: {{ .Values.werf.image.redis }}
+    resources:
+      requests:
+        cpu: {{ pluck .Values.werf.env .Values.redis.resources.requests.cpu | first | default .Values.redis.resources.requests.cpu._default }}
+        memory: {{ pluck .Values.werf.env .Values.redis.resources.requests.memory | first | default .Values.redis.resources.requests.memory._default }}
+      limits:
+        memory: {{ pluck .Values.werf.env .Values.redis.resources.limits.memory | first | default .Values.redis.resources.limits.memory._default }}
+    customConfig: []
+  redis:
+    imagePullSecrets:
+    - name: registrysecret
+    replicas: {{ pluck .Values.werf.env .Values.redis.replicas | first | default .Values.redis.replicas._default }}
+    image: {{ .Values.werf.image.redis }}
+    resources:
+      requests:
+        cpu: {{ pluck .Values.werf.env .Values.redis.resources.requests.cpu | first | default .Values.redis.resources.requests.cpu._default }}
+        memory: {{ pluck .Values.werf.env .Values.redis.resources.requests.memory | first | default .Values.redis.resources.requests.memory._default }}
+      limits:
+        memory: {{ pluck .Values.werf.env .Values.redis.resources.limits.memory | first | default .Values.redis.resources.limits.memory._default }}
+    exporter:
+      enabled: true
+      image: {{ .Values.werf.image.redis_exporter }}
+    securityContext:
+      runAsUser:  999
+      runAsGroup: 999
+      fsGroup:    0
+    storage:
+      persistentVolumeClaim:
+        metadata:
+          name: redis-data
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: {{ pluck .Values.werf.env .Values.redis.storage.size | first | default .Values.redis.storage.size._default }}
+          storageClassName: {{ pluck .Values.werf.env .Values.redis.storage.class | first | default .Values.redis.storage.class._default }}
+    customConfig:
+{{- range $index, $key := ( pluck .Values.werf.env .Values.redis.storage.custom_config | first | default .Values.redis.storage.custom_config._default ) }}
+    - "{{ $key }}"
+{{- end }}

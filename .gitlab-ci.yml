@@ -1,0 +1,48 @@
+stages:
+  - converge
+  - cleanup
+
+variables:
+  NAMESPACE: ${CI_ENVIRONMENT_SLUG}
+  RELEASE: redis-${CI_ENVIRONMENT_SLUG}
+  WERF_VERSION: "1.2 alpha"
+
+.base_converge: &base_converge
+  stage: converge
+  script:
+    - type multiwerf && source $(multiwerf use ${WERF_VERSION_GLOBAL:-$WERF_VERSION} --as-file)
+    - type werf && source $(werf ci-env gitlab --as-file)
+    - werf converge
+      --namespace ${NAMESPACE}
+      --release ${RELEASE}
+      --timeout ${DEPLOY_TIMEOUT:-1200}
+  except:
+    - schedules
+  tags:
+    - werf
+
+Converge to Stage Cluster:
+  <<: *base_converge
+  environment:
+    name: staging
+  when: manual
+
+Converge to Production Cluster:
+  <<: *base_converge
+  environment:
+    name: production
+  only:
+    - master
+  when: manual
+
+Cleanup:
+  stage: cleanup
+  script:
+    - type multiwerf && source $(multiwerf use ${WERF_VERSION_GLOBAL:-$WERF_VERSION} --as-file)
+    - type werf && source $(werf ci-env gitlab --as-file)
+    - docker login -u nobody -p ${WERF_IMAGES_CLEANUP_PASSWORD} ${WERF_REPO}
+    - werf cleanup
+  only:
+    - schedules
+  tags:
+    - werf

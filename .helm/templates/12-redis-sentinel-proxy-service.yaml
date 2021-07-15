@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: redis-sentinel-proxy
+spec:
+  ports:
+  - port: 6379
+    targetPort: 9999
+    name: redis-sentinel-proxy
+  selector:
+    app: redis-sentinel-proxy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-exporter
+  labels:
+    prometheus.deckhouse.io/target: redis
+spec:
+  ports:
+  - name: http-metrics
+    port: 9121
+    protocol: TCP
+    targetPort: 9121
+  selector:
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: redis-failover

@@ -1,0 +1,24 @@
+project: redis
+configVersion: 1
+---
+image: initimage
+from: alpine:3.6
+ansible:
+  beforeInstall:
+  - name: "Install base packages"
+    apk:
+      name:
+      - curl
+      - mysql-client
+      - gzip
+      - bash
+      update_cache: yes
+---
+image: redis
+from: redis:6.0.5-buster
+---
+image: redis_exporter
+from: oliver006/redis_exporter:v1.9.0-alpine
+---
+image: flant_redis_sentinel_proxy
+from: flant/redis-sentinel-proxy
