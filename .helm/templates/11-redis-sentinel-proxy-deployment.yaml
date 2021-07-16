@@ -24,7 +24,7 @@ spec:
         command: [ '/bin/sh', '-c', "while ! nc -z rfr-redis 6379; do sleep 1; done" ]
       containers:
       - name: redis-sentinel-proxy
-{{ tuple "flant_redis_sentinel_proxy" . | include "werf_container_image" | indent 10 }}
+{{ tuple "flant_redis_sentinel_proxy" . | include "werf_container_image" | indent 8 }}
         command: ["/usr/local/bin/redis-sentinel-proxy", "-master", "mymaster", "-sentinel", "rfs-redis:26379"]
         ports:
         - containerPort: 9999
