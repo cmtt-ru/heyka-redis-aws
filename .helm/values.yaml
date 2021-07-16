@@ -1,4 +1,6 @@
 redis:
+  password:
+    _default: VtCuno5pHCezmaD8
   image:
     _default: "redis:6.0.5-buster"
   host:

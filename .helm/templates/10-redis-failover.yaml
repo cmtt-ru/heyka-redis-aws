@@ -5,6 +5,8 @@ metadata:
   name: redis
 spec:
   priorityClassName: production-high
+  auth:
+    secretPath: redis-auth
   hardAntiAffinity: true
   sentinel:
     imagePullSecrets:
