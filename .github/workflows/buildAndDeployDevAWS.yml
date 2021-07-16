@@ -15,7 +15,7 @@ jobs:
     env:
       WERF_KUBE_CONTEXT: "main-aws"
       WERF_ENV: "heyka-dev"
-
+      ENV: "heyka-dev"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

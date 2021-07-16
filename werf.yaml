@@ -1,7 +1,7 @@
 project: redis
 configVersion: 1
 deploy:
- helmRelease: "[[ project ]]-[[ env ]]"
+ helmRelease: "[[ project ]]"
  namespace: "[[ env ]]"
 ---
 image: initimage
