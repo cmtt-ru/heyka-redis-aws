@@ -16,19 +16,6 @@ spec:
         app: redis-sentinel-proxy
     spec:
       affinity:
-{{- if eq .Values.werf.env  "production" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - redis-sentinel-proxy
-              topologyKey: "kubernetes.io/hostname"
-{{- end }}
       imagePullSecrets:
       - name: "registrysecret"
       initContainers:
