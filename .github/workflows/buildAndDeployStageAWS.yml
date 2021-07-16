@@ -14,8 +14,8 @@ jobs:
     runs-on: self-hosted
     env:
       WERF_KUBE_CONTEXT: "main-aws"
-      WERF_ENV: "heyka-dev"
-      ENV: "heyka-dev"
+      WERF_ENV: "heyka-stage"
+      ENV: "heyka-stage"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
