@@ -1,5 +1,8 @@
 project: redis
 configVersion: 1
+deploy:
+ helmRelease: "[[ project ]]-[[ env ]]"
+ namespace: "[[ env ]]"
 ---
 image: initimage
 from: alpine:3.6
