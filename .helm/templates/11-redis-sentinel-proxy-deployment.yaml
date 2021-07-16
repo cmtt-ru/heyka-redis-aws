@@ -20,14 +20,11 @@ spec:
       - name: "registrysecret"
       initContainers:
       - name: wait-sentinel
-        image: {{ .Values.werf.image.initimage }}
-        command: [ '/bin/sh', '-c', "while ! nc -z rfs-redis 26379; do sleep 1; done" ]
-      - name: wait-redis
-        image: {{ .Values.werf.image.initimage }}
+{{ tuple "initimage" . | include "werf_container_image" | indent 8 }}
         command: [ '/bin/sh', '-c', "while ! nc -z rfr-redis 6379; do sleep 1; done" ]
       containers:
       - name: redis-sentinel-proxy
-        image: {{ .Values.werf.image.flant_redis_sentinel_proxy }}
+{{ tuple "flant_redis_sentinel_proxy" . | include "werf_container_image" | indent 10 }}
         command: ["/usr/local/bin/redis-sentinel-proxy", "-master", "mymaster", "-sentinel", "rfs-redis:26379"]
         ports:
         - containerPort: 9999
