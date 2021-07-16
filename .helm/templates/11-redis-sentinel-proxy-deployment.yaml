@@ -6,7 +6,7 @@ metadata:
   annotations:
     "werf.io/fail-mode": IgnoreAndContinueDeployProcess
 spec:
-  replicas: {{ pluck .Values.werf.env .Values.redis.sentinel.replicas | first | default .Values.redis.sentinel.replicas._default }}
+  replicas: {{ pluck .Values.global.env .Values.redis.sentinel.replicas | first | default .Values.redis.sentinel.replicas._default }}
   selector:
     matchLabels:
       app: redis-sentinel-proxy
@@ -49,7 +49,7 @@ spec:
             command: ["redis-cli", "-p", "9999", "ping"]
         resources:
           requests:
-            cpu: {{ pluck .Values.werf.env .Values.redis.proxy.resources.requests.cpu | first | default .Values.redis.proxy.resources.requests.cpu._default }}
-            memory: {{ pluck .Values.werf.env .Values.redis.proxy.resources.requests.memory | first | default .Values.redis.proxy.resources.requests.memory._default }}
+            cpu: {{ pluck .Values.global.env .Values.redis.proxy.resources.requests.cpu | first | default .Values.redis.proxy.resources.requests.cpu._default }}
+            memory: {{ pluck .Values.global.env .Values.redis.proxy.resources.requests.memory | first | default .Values.redis.proxy.resources.requests.memory._default }}
           limits:
-            memory: {{ pluck .Values.werf.env .Values.redis.proxy.resources.limits.memory | first | default .Values.redis.proxy.resources.limits.memory._default }}
+            memory: {{ pluck .Values.global.env .Values.redis.proxy.resources.limits.memory | first | default .Values.redis.proxy.resources.limits.memory._default }}

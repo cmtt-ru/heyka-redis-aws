@@ -40,3 +40,4 @@ redis:
   exporter:
     image:
       _default: "oliver006/redis_exporter:v1.9.0-alpine"
+
