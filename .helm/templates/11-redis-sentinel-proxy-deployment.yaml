@@ -6,7 +6,7 @@ metadata:
   annotations:
     "werf.io/fail-mode": IgnoreAndContinueDeployProcess
 spec:
-  replicas: {{ pluck .Values.global.env .Values.redis.sentinel.replicas | first | default .Values.redis.sentinel.replicas._default }}
+  replicas: {{ pluck .Values.werf.env .Values.redis.sentinel.replicas | first | default .Values.redis.sentinel.replicas._default }}
   selector:
     matchLabels:
       app: redis-sentinel-proxy
@@ -20,11 +20,11 @@ spec:
       - name: "registrysecret"
       initContainers:
       - name: wait-sentinel
-{{ tuple "initimage" . | include "werf_container_image" | indent 8 }}
+        image: {{ index .Values.werf.image "initimage" }}
         command: [ '/bin/sh', '-c', "while ! nc -z rfr-redis 6379; do sleep 1; done" ]
       containers:
       - name: redis-sentinel-proxy
-{{ tuple "flant_redis_sentinel_proxy" . | include "werf_container_image" | indent 8 }}
+        image: {{ index .Values.werf.image "sentinel-proxy" }}
         command: ["/usr/local/bin/redis-sentinel-proxy", "-master", "mymaster", "-sentinel", "rfs-redis:26379"]
         ports:
         - containerPort: 9999
@@ -46,7 +46,7 @@ spec:
             command: ["redis-cli", "-p", "9999", "ping"]
         resources:
           requests:
-            cpu: {{ pluck .Values.global.env .Values.redis.proxy.resources.requests.cpu | first | default .Values.redis.proxy.resources.requests.cpu._default }}
-            memory: {{ pluck .Values.global.env .Values.redis.proxy.resources.requests.memory | first | default .Values.redis.proxy.resources.requests.memory._default }}
+            cpu: {{ pluck .Values.werf.env .Values.redis.proxy.resources.requests.cpu | first | default .Values.redis.proxy.resources.requests.cpu._default }}
+            memory: {{ pluck .Values.werf.env .Values.redis.proxy.resources.requests.memory | first | default .Values.redis.proxy.resources.requests.memory._default }}
           limits:
-            memory: {{ pluck .Values.global.env .Values.redis.proxy.resources.limits.memory | first | default .Values.redis.proxy.resources.limits.memory._default }}
+            memory: {{ pluck .Values.werf.env .Values.redis.proxy.resources.limits.memory | first | default .Values.redis.proxy.resources.limits.memory._default }}

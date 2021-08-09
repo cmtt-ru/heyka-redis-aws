@@ -3,5 +3,5 @@ kind: Secret
 metadata:
   name: redis-auth
 data:
-  password: {{ pluck .Values.global.env .Values.redis.password | first | default .Values.redis.password._default | b64enc }}
+  password: {{ pluck .Values.werf.env .Values.redis.password | first | default .Values.redis.password._default | b64enc }}
 type: Opaque

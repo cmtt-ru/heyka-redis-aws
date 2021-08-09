@@ -20,8 +20,8 @@ ansible:
 image: redis
 from: redis:6.0.5-buster
 ---
-image: redis_exporter
+image: exporter
 from: oliver006/redis_exporter:v1.9.0-alpine
 ---
-image: flant_redis_sentinel_proxy
+image: sentinel-proxy
 from: flant/redis-sentinel-proxy
