@@ -22,3 +22,5 @@ jobs:
         with:
           channel: alpha
           env: heyka-stage
+        env:
+          WERF_REPO: "ghcr.io/cmtt-ru/${{ github.event.repository.name }}"
