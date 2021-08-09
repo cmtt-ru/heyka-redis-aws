@@ -8,7 +8,7 @@ on:
       - master
 jobs:
   buildAndDeploy2Dev:
-    name: "Build and Deploy"
+    name: "Build and Deploy Dev"
     runs-on: self-hosted
     env:
       WERF_KUBE_CONTEXT: "main-aws"
@@ -18,9 +18,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: werf converge
-        uses: werf/actions/converge@v1.1
+        uses: werf/actions/converge@v1.2
         with:
           channel: alpha
           env: heyka-dev
-        env:
-          WERF_REPO: "ghcr.io/cmtt-ru/${{ github.event.repository.name }}"
