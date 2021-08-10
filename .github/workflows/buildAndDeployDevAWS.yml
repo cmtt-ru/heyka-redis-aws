@@ -8,7 +8,7 @@ on:
       - master
 jobs:
   buildAndDeploy2Dev:
-    name: "Build and Deploy Dev"
+    name: "Build and Deploy Dev AWS"
     runs-on: self-hosted
     env:
       WERF_KUBE_CONTEXT: "main-aws"
@@ -20,6 +20,5 @@ jobs:
       - name: werf converge
         uses: werf/actions/converge@v1.2
         with:
-          channel: alpha
+          channel: beta
           env: heyka-dev
-          github-token: ${{ secrets.CLEANUP_TOKEN }}
